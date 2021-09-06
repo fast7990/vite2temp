@@ -23,6 +23,18 @@ export default defineConfig({
         // https:true,//开启http2
         open: true
     },
+    base: './',
+    // 生产环境移除console
+    build: {
+        target: 'es2015',
+        // terserOptions: {
+        //     compress: {
+        //         drop_console: true
+        //     }
+        // },
+        outDir: 'dist', //指定输出路径
+        assetsDir: "assets", //指定生成静态资源的存放路径
+    },
     resolve: {
         extensions: ['.js', '.vue', '.json'],
         alias: [{

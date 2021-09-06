@@ -13,15 +13,11 @@ const _import = (path) => {
 const routes = [{
     path: '/',
     name: 'index',
-    component: _import('timeline')
+    component: _import('home')
 }, {
     path: '/home',
     name: 'home',
     component: _import('home')
-}, {
-    path: '/timeline2',
-    name: 'timeline2',
-    component: _import('timeline2')
 }]
 const router = createRouter({
     history: createWebHashHistory(),

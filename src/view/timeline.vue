@@ -4,7 +4,7 @@
  * @Author: sueRimn
  * @Date: 2021-08-21 22:18:47
  * @LastEditors: sueRimn
- * @LastEditTime: 2021-09-05 21:34:37
+ * @LastEditTime: 2021-09-06 00:25:48
 -->
 <template>
   <div id="main" class="main"></div>
@@ -26,56 +26,77 @@ onMounted(() => {
     return `${data.name},${data.value},${data.tip}`;
   };
   const splitData = rawData => {
-    var categoryData = [];
-    var values = [];
+    var time = [];
+    var value = [];
+    var type = [];
     for (var i = 0; i < rawData.length; i++) {
-      categoryData.push(rawData[i].time);
-      values.push(rawData[i].value);
+      time.push(rawData[i].time);
+      value.push(rawData[i].value);
+      type.push(rawData[i].type);
     }
-    console.log(values);
+    console.log(value);
     return {
-      categoryData: categoryData,
-      values: values
+      time: time,
+      value: value,
+      type: type
     };
   };
   const splitValue = formatdata => {
     let result = [];
     for (let index = 0; index < formatdata.length; index++) {
-      let values = formatdata[index];
-      let objfb = {
-        name: index,
-        type: "line",
-        // stack: "",
-        // 显示数值
+      const element = formatdata[index];
+      let backgroundColor = "#000";
+      if (element.type == 1) {
+        backgroundColor = "blue";
+      } else if (element.type == 2) {
+        backgroundColor = "green";
+      } else if (element.type == 3) {
+        backgroundColor = "red";
+      }
+      result.push({
+        name: element.time,
+        data: [[element.time, element.type, element.value]],
+        type: "scatter",
+        symbol: "triangle",
+        symbolRotate: 180,
+        symbolSize: 5,
         itemStyle: {
           normal: {
+            color: backgroundColor,
+            labelLine: {
+              show: false
+            },
             label: {
               show: true,
               borderCap: "butt",
-              color: "red",
-              // formatter: formatter,
-              backgroundColor: "#000",
+              color: "#ffffff",
+              position: "top",
+              distance: 0,
+              align: "left",
+              offset: [-53, 0],
+              verticalAlign: "bottom",
+              backgroundColor: backgroundColor,
+              formatter: function(e) {
+                return e.value[2];
+              },
+              width: 100,
+              overflow: "break",
               lineHeight: 16,
               padding: 5,
               borderRadius: 3
-            },
-            lineStyle: {
-              color: "rgba(0,0,0,0)"
             }
           }
-        },
-        data: values
-      };
-      result.push(objfb);
+        }
+      });
     }
-    console.log(result);
+    console.log(JSON.stringify(result));
     return result;
   };
   option = {
     grid: {
       left: "10%",
       right: "10%",
-      bottom: "15%",
+      bottom: "13%",
       containLabel: true
     },
     tooltip: {
@@ -83,11 +104,17 @@ onMounted(() => {
       axisPointer: {
         type: "cross",
         axis: "y"
+      },
+      formatter: function(params, ticket, callback) {
+        // debugger;
+        //提示框内容
+        var value = "";
+        return value;
       }
     },
-    legend: {
-      // data: [0, 1, 2, 3, 4, 5, 6]
-    },
+    // legend: {
+    //   data: []
+    // },
     dataZoom: [
       {
         type: "inside",
@@ -103,38 +130,21 @@ onMounted(() => {
       }
     ],
     xAxis: {
-      type: "category",
+      type: "time",
+      scale: true,
       axisLine: { onZero: false },
       splitLine: { show: false },
-      boundaryGap: false,
-      data: splitData(sourdata).categoryData
+      boundaryGap: true
     },
     yAxis: {
       type: "value",
       axisLabel: {
         show: true,
         interval: "auto",
-        formatter: "事件"
+        formatter: "{value} 类型"
       }
     },
-    // series: splitValue(sourdata)
-    series: [
-      {
-        name: "3的指数",
-        type: "line",
-        data: [[1]]
-      },
-      {
-        name: "3的指数",
-        type: "line",
-        data: [[1]]
-      },
-      {
-        name: "3的指数",
-        type: "line",
-        data: [[1]]
-      }
-    ]
+    series: splitValue(sourdata)
   };
 
   if (option && typeof option === "object") {
