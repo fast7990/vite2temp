@@ -13,15 +13,18 @@ const _import = (path) => {
 const routes = [{
     path: '/',
     name: 'index',
-    component: () => { return _import('home') }
+    meta: {
+        keepAlive: true //设置缓存
+    },
+    component: () => _import('home')
 }, {
     path: '/home',
     name: 'home',
-    component: () => { return _import('home') }
+    component: () => _import('home')
 }, {
     path: '/timeline',
     name: 'timeline',
-    component: () => { return _import('timeline') }
+    component: () => _import('timeline')
 }, {
     path: '/login',
     name: 'login',

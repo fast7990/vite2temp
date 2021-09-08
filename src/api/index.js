@@ -2,7 +2,7 @@ import axios from "@/service/axios";
 
 export const getWangYiNews = (data) => {
     return axios({
-        url: '/getWangYiNews',
+        url: '/api/comments.163',
         method: 'get',
         data
     })

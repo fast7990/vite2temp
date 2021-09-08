@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { ElLoading, ElMessage } from 'element-plus';
 // 请求域名-本地请求
-const http = 'https://api.apiopen.top';
+const http = 'https://api.uomg.com';
 // 创建axios实例
 const instance = axios.create({
     baseURL: http,
@@ -25,12 +25,12 @@ const showLoading = () => {
     requestCount++
 }
 const hideLoading = () => {
-    requestCount--
-    if (requestCount === 0) {
-        loading.close()
+        requestCount--
+        if (requestCount === 0) {
+            loading.close()
+        }
     }
-}
-//请求拦截
+    //请求拦截
 instance.interceptors.request.use((config) => {
     showLoading();
     if (config.method === 'POST') {

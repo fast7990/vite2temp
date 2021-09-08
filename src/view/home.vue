@@ -15,24 +15,33 @@
             >
               <el-image
                 style="width: 100px; height: 100px"
-                :src="item.image"
+                :src="item.picurl"
                 fit="cover"
               ></el-image>
-              <a :href="item.path" target="_blank" :alt="item.title">{{
-                item.title
-              }}</a>
-              <el-button @click="delitem(index)">删除</el-button>
+              <a
+                :href="item.url"
+                target="_blank"
+                :alt="item.name"
+                class="hei"
+                >{{ item.name }}</a
+              >
+              <el-button @click="delitem(index)" size="mini">删除{{news_list_obj.pass}}</el-button>
             </li>
           </ul>
         </el-col>
       </el-row>
-      <el-row><el-button @click="openlogin">login</el-button></el-row>
+      <el-row>
+        <el-button @click="openlogin">login</el-button>
+        <router-link to="/timeline">
+          <el-button>timeline</el-button>
+        </router-link>
+      </el-row>
     </el-main>
   </el-container>
 </template>
 <script setup>
 import { getWangYiNews } from "@/api";
-import { reactive, getCurrentInstance, onMounted } from "vue";
+import { reactive, getCurrentInstance, onMounted, onActivated } from "vue";
 import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";
 
@@ -46,14 +55,21 @@ const news_list_obj = reactive({
   count: 0,
 });
 onMounted(() => {
-  getWangYiNews().then((res) => {
-    news_list_obj.result = res.result;
+  getWangYiNews({
+    format: "json",
+  }).then((res) => {
+    news_list_obj.result = [res.data];
   });
 });
-console.log(store.state.name);
+onActivated(() => {
+  // keeplive，每次执行todo
+});
+console.log(store.state.user.name, "ppppp");
+store.commit("login", 123);
+console.log(store.state.user.loginProvider, "ppppp222");
 const load = () => {
   news_list_obj.count++;
-  console.log(news_list_obj.count);
+  // console.log(news_list_obj.count);
 };
 const openlogin = () => {
   router.push("/login");
@@ -61,12 +77,16 @@ const openlogin = () => {
 const delitem = (index) => {
   news_list_obj.result.splice(index, 1);
 };
+news_list_obj.pass="12"
 </script>
-<style scoped>
+<style scoped lang="scss">
 .infinite-list {
   display: flex;
   flex-direction: column;
   align-items: baseline;
   justify-content: center;
+}
+.hei {
+  color: $color;
 }
 </style>

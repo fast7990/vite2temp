@@ -7,7 +7,12 @@
  * @LastEditTime: 2021-09-04 19:46:48
 -->
 <template>
-  <router-view></router-view>
+  <router-view v-slot="{ Component }">
+    <keep-alive>
+      <component :is="Component" v-if="$route.meta.keepAlive" />
+    </keep-alive>
+    <component :is="Component" v-if="!$route.meta.keepAlive" />
+  </router-view>
 </template>
 
 <script setup>
