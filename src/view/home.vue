@@ -60,6 +60,7 @@ onMounted(() => {
   }).then((res) => {
     news_list_obj.result = [res.data];
   });
+  console.log(import.meta.env,'===')
 });
 onActivated(() => {
   // keeplive，每次执行todo
