@@ -25,15 +25,20 @@
                 class="hei"
                 >{{ item.name }}</a
               >
-              <el-button @click="delitem(index)" size="mini">删除{{news_list_obj.pass}}</el-button>
+              <el-button @click="delitem(index)" size="mini"
+                >删除{{ news_list_obj.pass }}</el-button
+              >
             </li>
           </ul>
         </el-col>
       </el-row>
       <el-row>
-        <el-button @click="openlogin">login</el-button>
-        <router-link to="/timeline">
-          <el-button>timeline</el-button>
+        <router-link
+          v-for="(item, index) in menulist"
+          :key="index"
+          :to="item.path"
+        >
+          <el-button v-if="item.meta">{{ item.meta.title }}</el-button>
         </router-link>
       </el-row>
     </el-main>
@@ -41,7 +46,16 @@
 </template>
 <script setup>
 import { getWangYiNews } from "@/api";
-import { reactive, getCurrentInstance, onMounted, onActivated } from "vue";
+import {
+  reactive,
+  getCurrentInstance,
+  onMounted,
+  onActivated,
+  onBeforeMount,
+  toRefs,
+  toRaw,
+  ref,
+} from "vue";
 import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";
 
@@ -54,13 +68,18 @@ const news_list_obj = reactive({
   result: [1],
   count: 0,
 });
+let menulist = ref([]);
+onBeforeMount(() => {
+  menulist.value = router.options.routes;
+  console.log(menulist, "====111");
+});
 onMounted(() => {
-  getWangYiNews({
-    format: "json",
-  }).then((res) => {
-    news_list_obj.result = [res.data];
-  });
-  console.log(import.meta.env,'===')
+  // getWangYiNews({
+  //   format: "json",
+  // }).then((res) => {
+  //   news_list_obj.result = [res.data];
+  // });
+  console.log(import.meta.env, "===");
 });
 onActivated(() => {
   // keeplive，每次执行todo
@@ -78,7 +97,7 @@ const openlogin = () => {
 const delitem = (index) => {
   news_list_obj.result.splice(index, 1);
 };
-news_list_obj.pass="12"
+news_list_obj.pass = "12";
 </script>
 <style scoped lang="scss">
 .infinite-list {

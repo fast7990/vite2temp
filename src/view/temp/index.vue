@@ -1,0 +1,20 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: sueRimn
+ * @Date: 2021-08-21 23:43:58
+ * @LastEditors: sueRimn
+ * @LastEditTime: 2021-08-22 00:29:28
+-->
+<template>
+  <router-view v-slot="{ Component }">
+    <transition>
+      <component :is="Component" />
+    </transition>
+  </router-view>
+</template>
+<script setup>
+import { ref, reactive } from "vue";
+const state = reactive({ count: 0 });
+let app = ref(0);
+</script>
